@@ -24,6 +24,12 @@ using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
+using AncientMonkey.Projectiles;
+using Il2Cpp;
+using Il2CppAssets.Scripts.Models.Bloons.Behaviors;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions;
+using Il2CppAssets.Scripts.Models.Towers.Filters;
+using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
 
 namespace AncientMonkey.Weapons
 {
@@ -483,9 +489,204 @@ namespace AncientMonkey.Weapons
             tower.UpdateRootModel(towerModel);
         }
     }
+    public class Chakrams : WeaponTemplate
+    {
+        public override int SandboxIndex => 2;
+        public override Rarity WeaponRarity => Rarity.Rare;
+        public override string Icon => VanillaSprites.BladeShooterUpgradeIcon;
+        public override string WeaponName => "Chakrams";
+        public override bool IsCamo => true;
+        public override Sprite CustomIcon => GetSprite("ChakramIcon");
+        public override string Description => "Boomerang 4th path by LynxC";
+        public override void EditTower(Tower tower)
+        {
+            var bleed = Game.instance.model.GetTowerFromId("Sauda 9").GetAttackModel().weapons[0].projectile.GetBehavior<AddBehaviorToBloonModel>().Duplicate();
+            bleed.name = "BleedModel";
+            bleed.GetBehavior<DamageOverTimeModel>().interval = 1f;
+
+            var wpn = Game.instance.model.GetTowerFromId("BoomerangMonkey").GetAttackModel().Duplicate();
+            wpn.weapons[0].projectile.collisionPasses = new[] { -1, 0, 1 };
+            wpn.weapons[0].projectile.hasDamageModifiers = true;
+            wpn.weapons[0].projectile.AddBehavior(bleed);
+            wpn.weapons[0].projectile.GetDescendants<FilterInvisibleModel>().ForEach(model => model.isActive = false);
+            wpn.weapons[0].projectile.AddBehavior(new DamageModifierForTagModel("aaa", "Camo", 1, 1, false, false) { name = "CamoModifier_" });
+            wpn.weapons[0].projectile.ApplyDisplay<Chakram>();
+            wpn.weapons[0].projectile.GetBehavior<FollowPathModel>().Speed *= 2f;
+            wpn.range = tower.towerModel.range;
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            towerModel.AddBehavior(wpn);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    public class Frostbite : WeaponTemplate
+    {
+        public override int SandboxIndex => 2;
+        public override Rarity WeaponRarity => Rarity.Rare;
+        public override string Icon => VanillaSprites.ShrapnelShotUpgradeIcon;
+        public override string WeaponName => "Frostbite";
+        public override Sprite CustomIcon => GetSprite("FrostbiteIcon");
+        public override string Description => "Ice Monkey 4th path by LynxC";
+        public override void EditTower(Tower tower)
+        {
+            var wpn = Game.instance.model.GetTowerFromId("DartMonkey").GetAttackModel().Duplicate();
+            wpn.weapons[0].projectile.display = Game.instance.model.GetTower(TowerType.IceMonkey, 0, 0, 5).GetAttackModel().weapons[0].projectile.display;
+            wpn.weapons[0].projectile.GetDamageModel().immuneBloonProperties = BloonProperties.Lead | BloonProperties.White;
+            wpn.weapons[0].projectile.scale /= 1.25f;
+            wpn.weapons[0].rate /= 1.2f;
+            wpn.weapons[0].projectile.GetDamageModel().damage += 1;
+            wpn.weapons[0].projectile.AddBehavior(new FreezeModel("FreezeModel_", 0, 1f, "ShardFreeze", 1, "Ice", true, new GrowBlockModel("GrowBlockModel_"), null, 0, false, false, false));
+            wpn.weapons[0].projectile.collisionPasses = new int[] { 0, -1 };
+            wpn.range = tower.towerModel.range;
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            towerModel.AddBehavior(wpn);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    public class CrackShotDarts : WeaponTemplate
+    {
+        public override int SandboxIndex => 2;
+        public override Rarity WeaponRarity => Rarity.Rare;
+        public override string Icon => VanillaSprites.AirburstDartsUpgradeIcon;
+        public override string WeaponName => "Crack Shot Darts";
+        public override Sprite CustomIcon => GetSprite("CrackShotIcon");
+        public override string Description => "Monkey Ace 4th path by LynxC";
+        public override void EditTower(Tower tower)
+        {
+            var bomb = Game.instance.model.GetTower(TowerType.BombShooter).GetWeapon().projectile.GetBehavior<CreateProjectileOnContactModel>().Duplicate();
+            var effect = Game.instance.model.GetTower(TowerType.BombShooter).GetWeapon().projectile.GetBehavior<CreateEffectOnContactModel>().Duplicate();
+            var dart = Game.instance.model.GetTower(TowerType.DartMonkey).GetWeapon().projectile.Duplicate();
+
+            var phoenix = Game.instance.model.GetTowerFromId("WizardMonkey-050").GetBehavior<TowerCreateTowerModel>().Duplicate();
+            var ace = Game.instance.model.GetTowerFromId("MonkeyAce").GetBehavior<AirUnitModel>().Duplicate();
+            var wpn = Game.instance.model.GetTowerFromId("MonkeyAce").GetBehavior<AttackAirUnitModel>().Duplicate();
+            wpn.weapons[0].projectile.AddBehavior(bomb);
+            wpn.weapons[0].projectile.AddBehavior(effect);
+            wpn.weapons[0].projectile.pierce = 1;
+            wpn.weapons[0].projectile.AddBehavior(new CreateProjectileOnContactModel("Crackshot", dart, new ArcEmissionModel("ArcEmissionModel_", 3, 0, 25, null, true, false), true, false, false));
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            ace.AddBehavior(wpn);
+            phoenix.towerModel.ApplyDisplay<blankdisplay.BlankDisplay>();
+            phoenix.towerModel.RemoveBehavior<AttackModel>();
+            phoenix.towerModel.RemoveBehavior<PathMovementFromScreenCenterModel>();
+            phoenix.towerModel.RemoveBehavior<CreateEffectOnPlaceModel>();
+            phoenix.towerModel.RemoveBehavior<Il2CppAssets.Scripts.Models.Towers.Behaviors.CreateEffectOnExpireModel>();
+            phoenix.towerModel.AddBehavior(ace);
+
+            towerModel.AddBehavior(phoenix);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    public class HighGradeDarts : WeaponTemplate
+    {
+        public override int SandboxIndex => 2;
+        public override Rarity WeaponRarity => Rarity.Rare;
+        public override string Icon => VanillaSprites.ArmorPiercingDartsUpgradeIcon;
+        public override string WeaponName => "High-Grade Darts";
+        public override Sprite CustomIcon => GetSprite("HighGradeDartsIcon");
+        public override string Description => "Dartling 4th path by LynxC";
+        public override void EditTower(Tower tower)
+        {
+            var wpn = Game.instance.model.GetTowerFromId("DartlingGunner-100").GetAttackModel().Duplicate();
+            wpn.weapons[0].projectile.AddBehavior(new WindModel("WindModel_", 6, 12, 100, false, null, 0, null, 1));
+            wpn.weapons[0].projectile.GetDamageModel().damage += 1;
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            towerModel.AddBehavior(wpn);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    public class SaiToss : WeaponTemplate
+    {
+        public override int SandboxIndex => 2;
+        public override Rarity WeaponRarity => Rarity.Rare;
+        public override string Icon => VanillaSprites.VeryQuickShotsUpgradeIcon;
+        public override string WeaponName => "Sai Toss";
+        public override bool IsCamo => true;
+        public override Sprite CustomIcon => GetSprite("SaiTossIcon");
+        public override string Description => "Ninja 4th path by LynxC";
+        public override void EditTower(Tower tower)
+        {
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            var wpn = Game.instance.model.GetTowerFromId("DartMonkey-002").GetAttackModel().Duplicate();
+            wpn.weapons[0].projectile.GetDamageModel().damage = 3;
+            wpn.weapons[0].projectile.pierce = 4;
+            wpn.weapons[0].rate = Game.instance.model.GetTowerFromId("NinjaMonkey-200").GetAttackModel().weapons[0].rate * 3f;
+            wpn.weapons[0].projectile.ApplyDisplay<Sai>();
+            wpn.range = tower.towerModel.range;
+            towerModel.AddBehavior(wpn);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    public class SeaHeart : WeaponTemplate
+    {
+        public override int SandboxIndex => 2;
+        public override Rarity WeaponRarity => Rarity.Rare;
+        public override string Icon => VanillaSprites.BarracudaUpgradeIcon;
+        public override string WeaponName => "Heart of the Sea";
+        public override bool IsLead => true;
+        public override Sprite CustomIcon => GetSprite("HeartofSeaIcon");
+        public override string Description => "Druid 4th path by LynxC";
+        public override void EditTower(Tower tower)
+        {
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            var wpn = Game.instance.model.GetTowerFromId("DartMonkey").GetAttackModel().Duplicate();
+            wpn.weapons[0].projectile.display = Game.instance.model.GetTower(TowerType.BeastHandler, 2).GetBehavior<BeastHandlerLeashModel>().towerModel.GetAttackModel().weapons[0].projectile.display;
+            wpn.weapons[0].projectile.GetBehavior<TravelStraitModel>().Lifespan *= 3;
+            wpn.weapons[0].projectile.GetBehavior<TravelStraitModel>().Speed /= 2.5f;
+            wpn.weapons[0].projectile.GetDamageModel().immuneBloonProperties = BloonProperties.None;
+            wpn.weapons[0].projectile.GetDamageModel().damage = 3;
+            wpn.weapons[0].projectile.pierce = 99;
+            wpn.weapons[0].rate = 3;
+            wpn.range = tower.towerModel.range;
+            towerModel.AddBehavior(wpn);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    public class BananaStock : WeaponTemplate
+    {
+        public override int SandboxIndex => 2;
+        public override Rarity WeaponRarity => Rarity.Rare;
+        public override string Icon => VanillaSprites.EzCollectUpgradeIcon;
+        public override string WeaponName => "Banana Stock";
+        public override Sprite CustomIcon => GetSprite("BananaStockIcon");
+        public override string Description => "Farm 4th path by LynxC";
+        public override void EditTower(Tower tower)
+        {
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            var cash = Game.instance.model.GetTower(TowerType.BananaFarm, 0, 0, 5).GetBehavior<PerRoundCashBonusTowerModel>().Duplicate();
+            cash.cashPerRound = 50;
+            cash.cashRoundBonusMultiplier = 5;
+
+            towerModel.AddBehavior(cash);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    public class BurstFire : WeaponTemplate
+    {
+        public override int SandboxIndex => 2;
+        public override Rarity WeaponRarity => Rarity.Rare;
+        public override string Icon => VanillaSprites.EvenMoreTacksUpgradeIcon;
+        public override string WeaponName => "Burst Fire";
+        public override bool IsLead => true;
+        public override Sprite CustomIcon => GetSprite("BurstFireIcon");
+        public override string Description => "Engineer 4th path by LynxC";
+        public override void EditTower(Tower tower)
+        {
+            var wpn = Game.instance.model.GetTowerFromId("EngineerMonkey").GetAttackModel().Duplicate();
+            wpn.weapons[0].projectile.hasDamageModifiers = true;
+            wpn.weapons[0].projectile.AddBehavior(new DamageModifierForTagModel("aaa", "Ceramic", 1, 3, false, false) { name = "CeramicModifier_" });
+            wpn.weapons[0].projectile.GetDamageModel().immuneBloonProperties = BloonProperties.None;
+            wpn.weapons[0].emission = new ArcEmissionModel("ArcEmissionModel_", 3, 0, 25, null, false, false);
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            wpn.range = tower.towerModel.range;
+            towerModel.AddBehavior(wpn);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    
     public class Rare
     {
         public static List<string> RareWpn = new List<string>();
         public static List<string> RareImg = new List<string>();
+        public static List<Sprite> RareCustomImg = new List<Sprite>();
     }
 }

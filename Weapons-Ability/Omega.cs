@@ -254,6 +254,7 @@ namespace AncientMonkey.Weapons
     {
         public static List<string> OmegaWpn = new List<string>();
         public static List<string> OmegaImg = new List<string>();
+        public static List<Sprite> OmegaCustomImg = new List<Sprite>();
     }
 }
 namespace Monkeys

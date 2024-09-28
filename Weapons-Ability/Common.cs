@@ -17,6 +17,10 @@ using System.Diagnostics;
 using Il2Cpp;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions.Behaviors;
+using Il2CppAssets.Scripts.Models.GenericBehaviors;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using AncientMonkey.Projectiles;
 
 namespace AncientMonkey.Weapons
 {
@@ -295,9 +299,106 @@ namespace AncientMonkey.Weapons
             tower.UpdateRootModel(towerModel);
         }
     }
+    public class SeekingDart : WeaponTemplate
+    {
+        public override int SandboxIndex => 1;
+        public override Rarity WeaponRarity => Rarity.Common;
+        public override string WeaponName => "Rubber Seeking";
+        public override string Icon => VanillaSprites.NevaMissTargetingUpgradeIcon;
+        public override bool IsLead => true;
+        public override Sprite CustomIcon => GetSprite("RubberSeekingIcon");
+        public override string Description => "Dart Monkey 4th path by LynxC";
+        public override void EditTower(Tower tower)
+        {
+            var seeking = Game.instance.model.GetTowerFromId("WizardMonkey-500").GetWeapon().projectile.GetBehavior<TrackTargetModel>().Duplicate();
+
+            seeking.distance = 999;
+            seeking.constantlyAquireNewTarget = true;
+
+
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            var wpn = Game.instance.model.GetTowerFromId("DartMonkey").GetAttackModel().Duplicate();
+            wpn.weapons[0].projectile.GetDamageModel().immuneBloonProperties = Il2Cpp.BloonProperties.None;
+            wpn.weapons[0].projectile.AddBehavior(seeking);
+            wpn.weapons[0].projectile.GetBehavior<TravelStraitModel>().Lifespan *= 4;
+            wpn.weapons[0].projectile.pierce += 1;
+            wpn.range = tower.towerModel.range;
+            towerModel.AddBehavior(wpn);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    public class Incendiary : WeaponTemplate
+    {
+        public override int SandboxIndex => 1;
+        public override Rarity WeaponRarity => Rarity.Common;
+        public override string WeaponName => "Incendiary Bomb";
+        public override string Icon => VanillaSprites.BiggerBombsUpgradeIcon;
+        public override bool IsLead => true;
+        public override Sprite CustomIcon => GetSprite("IncendiaryIcon");
+        public override string Description => "Bomb Shooter 4th path by LynxC";
+        public override void EditTower(Tower tower)
+        {
+            var fire = Game.instance.model.GetTowerFromId("MortarMonkey-002").Duplicate<TowerModel>().GetBehavior<AttackModel>().weapons[0].projectile.
+                GetBehavior<CreateProjectileOnExhaustFractionModel>().projectile.GetBehavior<AddBehaviorToBloonModel>().Duplicate();
+
+            var wpn = Game.instance.model.GetTowerFromId("BombShooter-100").GetAttackModel().Duplicate();
+            wpn.weapons[0].projectile.GetBehavior<CreateProjectileOnContactModel>().projectile.AddBehavior(fire);
+            wpn.weapons[0].projectile.GetBehavior<CreateProjectileOnContactModel>().projectile.collisionPasses = new int[] { 0, -1 };
+            wpn.range = tower.towerModel.range;
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            towerModel.AddBehavior(wpn);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    public class Ripper : WeaponTemplate
+    {
+        public override int SandboxIndex => 1;
+        public override Rarity WeaponRarity => Rarity.Common;
+        public override string WeaponName => "Ripper";
+        public override string Icon => VanillaSprites.AcidicMixtureDipUpgradeIcon;
+        public override Sprite CustomIcon => GetSprite("RipperIcon");
+        public override string Description => "Buccaneer 4th path by LynxC";
+        public override void EditTower(Tower tower)
+        {
+            var bleed = Game.instance.model.GetTowerFromId("Sauda 9").GetAttackModel().weapons[0].projectile.GetBehavior<AddBehaviorToBloonModel>().Duplicate();
+
+            var wpn = Game.instance.model.GetTowerFromId("MonkeyBuccaneer").GetAttackModel().Duplicate();
+            wpn.GetBehavior<RotateToTargetModel>().additionalRotation = 0;
+            wpn.weapons[0].emission.RemoveBehavior<EmissionRotationOffTowerDirectionModel>();
+            wpn.weapons[0].ejectX = 0;
+            wpn.weapons[0].ejectY = 0;
+            wpn.weapons[0].ejectX = 0;
+
+            wpn.weapons[0].projectile.AddBehavior(bleed);
+            wpn.weapons[0].projectile.collisionPasses = new[] { -1, 0, 1 };
+            wpn.range = tower.towerModel.range;
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            towerModel.AddBehavior(wpn);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    public class Trident : WeaponTemplate
+    {
+        public override int SandboxIndex => 1;
+        public override Rarity WeaponRarity => Rarity.Common;
+        public override string WeaponName => "Trident";
+        public override string Icon => VanillaSprites.Mermonkey000;
+        public override void EditTower(Tower tower)
+        {
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            var wpn = Game.instance.model.GetTowerFromId("Mermonkey").GetAttackModel().Duplicate();
+            wpn.range = tower.towerModel.range;
+            towerModel.AddBehavior(wpn);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+
+
+
     public class Common
     {
         public static List<string> CommonWpn = new List<string>();
         public static List<string> CommonImg = new List<string>();
+        public static List<Sprite> CommonCustomImg = new List<Sprite>();
     }
 }

@@ -29,6 +29,10 @@ using Il2CppAssets.Scripts.Models.Towers.Weapons.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Mutators;
 using Il2CppAssets.Scripts.Models.GenericBehaviors;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities.Behaviors;
+using BTD_Mod_Helper.Api;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
+using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
+using Il2CppSystem.IO;
 
 namespace AncientMonkey.Weapons
 {
@@ -269,9 +273,97 @@ namespace AncientMonkey.Weapons
             tower.UpdateRootModel(towerModel);
         }
     }
+    public class Popseidon : AbilityTemplate
+    {
+        public override string AbilityName => "Popseidon";
+        public override string Icon => VanillaSprites.Mermonkey050;
+        public override void EditTower(Tower tower)
+        {
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            var ab = Game.instance.model.GetTowerFromId("Mermonkey-050").GetAbility().Duplicate();
+            towerModel.AddBehavior(ab);
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    public class BananaStockExchange : AbilityTemplate
+    {
+        public override string AbilityName => "Banana Stock Exchange";
+        public override string Icon => VanillaSprites.ThriveIcon;
+        public override Sprite CustomIcon => GetSprite("BananaStockExchangeIcon");
+        public override string Description => "Custom Ability by LynxC";
+        public override void EditTower(Tower tower)
+        {
+            foreach (var ability in ModContent.GetContent<AbilityTemplate>().OrderByDescending(c => c.mod == mod))
+            {
+                if (ability.Name == "BananaStockExchange")
+                {
+                    if (ability.stackIndex > 1)
+                    {
+                        var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+
+                        if (towerModel.HasBehavior<TowerCreateTowerModel>())
+                        {
+                            foreach (var towercreate in towerModel.GetBehaviors<TowerCreateTowerModel>().ToArray())
+                            {
+                                if (towercreate.towerModel.HasBehavior<AirUnitModel>())
+                                {
+                                    foreach (var attackModel in towercreate.towerModel.GetBehavior<AirUnitModel>().GetBehaviors<AttackAirUnitModel>().ToArray())
+                                    {
+                                        if (towerModel.GetBehavior<TowerCreateTowerModel>().towerModel.HasBehavior<AirUnitModel>())
+                                        {
+                                            if (attackModel.weapons[0].projectile.HasBehavior<CashModel>())
+                                            {
+                                                towerModel.GetAttackModel().weapons[0].projectile.GetBehavior<CashModel>().minimum *= 1.5f;
+                                                towerModel.GetAttackModel().weapons[0].projectile.GetBehavior<CashModel>().maximum *= 1.5f;
+                                            }
+                                        }
+                                    }
+                                    foreach (var attackModel in towercreate.towerModel.GetBehavior<AirUnitModel>().GetBehaviors<AttackModel>().ToArray())
+                                    {
+                                        if (attackModel.weapons[0].projectile.HasBehavior<CashModel>())
+                                        {
+                                            towerModel.GetAttackModel().weapons[0].projectile.GetBehavior<CashModel>().minimum *= 1.5f;
+                                            towerModel.GetAttackModel().weapons[0].projectile.GetBehavior<CashModel>().maximum *= 1.5f;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        foreach (var attackModel in towerModel.GetDescendants<AttackModel>().ToArray())
+                        {
+                            if (!attackModel.weapons[0].projectile.HasBehavior<SlowModel>())
+                            {
+                                if (attackModel.weapons[0].projectile.HasBehavior<CashModel>())
+                                {
+                                    towerModel.GetAttackModel().weapons[0].projectile.GetBehavior<CashModel>().minimum *= 1.5f;
+                                    towerModel.GetAttackModel().weapons[0].projectile.GetBehavior<CashModel>().maximum *= 1.5f;
+                                }
+                            }
+                        }
+                        foreach (var cashModel in towerModel.GetDescendants<PerRoundCashBonusTowerModel>().ToArray())
+                        {
+                            cashModel.cashPerRound *= 1.5f;
+                        }
+
+                        tower.UpdateRootModel(towerModel);
+                    }
+                    else
+                    {
+                        var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+                        var cash = Game.instance.model.GetTower(TowerType.BananaFarm, 0, 0, 5).GetBehavior<PerRoundCashBonusTowerModel>().Duplicate();
+                        cash.cashPerRound = 1000;
+
+                        towerModel.AddBehavior(cash);
+                        tower.UpdateRootModel(towerModel);
+                    }
+                }
+            }
+        }
+    }
     public class AbilityClass
     {
         public static List<string> AbilityName = new List<string>();
         public static List<string> AbilityImg = new List<string>();
+        public static List<Sprite> AbilityCustomImg = new List<Sprite>();
     }
 }

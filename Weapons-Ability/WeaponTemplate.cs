@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BTD_Mod_Helper.Api;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
 using Il2CppAssets.Scripts.Simulation.Towers;
+using UnityEngine;
 
 namespace AncientMonkey
 {
@@ -28,12 +29,13 @@ namespace AncientMonkey
             Godly,
             Omega,
         }
+        public float stackIndex = 0;
+        public bool enabled = true;
+        public bool unlocked = false;
         public virtual bool IsCamo { get; }
         public virtual bool IsLead { get; }
-        public virtual bool IsModded { get; }
-        public virtual string ModName { get; }
+        public virtual string Description { get; }
+        public virtual Sprite CustomIcon { get; }
 
-
-        public List<AttackModel> attackModelList = new List<AttackModel>();
     }
 }
