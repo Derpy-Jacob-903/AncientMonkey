@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>AncientMonkey</RootNamespace>
@@ -11,6 +11,9 @@
     </PropertyGroup>
     <ItemGroup>
       <None Remove="AncientMonkeyIcon.png" />
+      <None Remove="Assets\Projectiles\WaterProjectile1.png" />
+      <None Remove="Assets\Projectiles\WaterProjectile2.png" />
+      <None Remove="Assets\Rare\DeadlyWater.png" />
     </ItemGroup>
     <ItemGroup>
         <Content Include=".github\workflows\build.yml" />

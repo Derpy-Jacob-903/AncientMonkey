@@ -67,44 +67,6 @@ using Il2CppAssets.Scripts.Models.Towers.Weapons.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions;
 using Il2CppAssets.Scripts.Models.Towers.Filters;
 using HarmonyLib;
-using Il2Cpp;
-using System;
-using BTD_Mod_Helper.Api.Components;
-using Il2CppAssets.Scripts.Unity.UI_New.InGame;
-using BTD_Mod_Helper.Api.Towers;
-using Il2CppAssets.Scripts.Models.Towers;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
-using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
-using Il2CppAssets.Scripts.Unity;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors;
-using BTD_Mod_Helper.Extensions;
-using Il2CppAssets.Scripts.Unity.UI_New.InGame;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities;
-using Il2CppAssets.Scripts.Models.Towers.TowerFilters;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities.Behaviors;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions;
-using System.Linq;
-using Il2CppAssets.Scripts.Simulation.Towers;
-using Il2CppAssets.Scripts.Simulation.Objects;
-using Il2CppAssets.Scripts.Models;
-using static Il2CppSystem.Globalization.TimeSpanParse;
-using Il2CppAssets.Scripts.Simulation.Towers.Behaviors.Abilities;
-using UnityEngine;
-using BTD_Mod_Helper.Api.ModOptions;
-using Il2CppAssets.Scripts.Models.Towers.Mods;
-using Il2CppAssets.Scripts.Models.Towers.Upgrades;
-using Il2CppAssets.Scripts.Unity.Bridge;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack.Behaviors;
-using Il2CppAssets.Scripts.Unity.Towers.Weapons;
-using Il2CppAssets.Scripts.Unity.Towers;
-using System.Net.WebSockets;
-using Unity.XR.OpenVR;
-using System.Data.SqlTypes;
-using Il2CppAssets.Scripts.Models.Bloons.Behaviors;
-using Il2CppAssets.Scripts.Models.Towers.Projectiles;
-using Il2CppSystem.IO;
-using AncientMonkey;
 using Il2CppAssets.Scripts.Simulation.SimulationBehaviors;
 
 namespace blankdisplay
@@ -140,10 +102,10 @@ namespace AncientMonkey
         public override void ModifyBaseTowerModel(TowerModel towerModel)
         {
             var attackModel = towerModel.GetAttackModel();
-            towerModel.RemoveBehavior(attackModel);
+            attackModel.range = 0;
         }
     }
-    [HarmonyPatch(typeof(Il2CppAssets.Scripts.Simulation.SimulationBehaviors.NecroData), nameof(NecroData.RbePool))]
+    [HarmonyPatch(typeof(NecroData), nameof(NecroData.RbePool))]
     internal static class Necro_RbePool
     {
         [HarmonyPrefix]
@@ -152,9 +114,15 @@ namespace AncientMonkey
             var tower = __instance.tower;
             if (tower.towerModel.name.Contains("Ancient"))
             {
+                
                 __result = 9999;
+                return false;
             }
-            return false;
+            else
+            {
+                return true;
+            }
         }
     }
+   
 }
