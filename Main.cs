@@ -3,87 +3,28 @@ using BTD_Mod_Helper;
 using AncientMonkey;
 using Il2CppAssets.Scripts.Simulation.Towers;
 using Il2CppAssets.Scripts.Models.Towers;
-using static Il2CppSystem.Globalization.TimeSpanParse;
 using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models;
 using BTD_Mod_Helper.Api.Components;
 using BTD_Mod_Helper.Api.Enums;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame;
-using MelonLoader;
-using BTD_Mod_Helper;
-using System;
-using Il2CppAssets.Scripts.Simulation.Towers.Weapons;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
-using Il2CppAssets.Scripts.Models.Towers;
-using BTD_Mod_Helper.Extensions;
-using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
-using Il2CppAssets.Scripts.Unity.UI_New.InGame;
 using UnityEngine;
-using BTD_Mod_Helper.Api.Components;
-using BTD_Mod_Helper.Api.Enums;
-using Il2CppAssets.Scripts.Simulation.Towers;
-using UnityEngine;
-using Il2CppAssets.Scripts.Data.Gameplay.Mods;
-using Il2CppSystem;
-using Il2CppAssets.Scripts.Simulation.Towers.Behaviors.Attack.Behaviors;
 using System.Linq;
-using BTD_Mod_Helper.Api.Enums;
-using BTD_Mod_Helper.Extensions;
 using Il2Cpp;
-using Il2CppAssets.Scripts.Models.GenericBehaviors;
-using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Filters;
 using Il2CppAssets.Scripts.Unity;
-
-using Il2CppAssets.Scripts.Unity;
-using Il2CppAssets.Scripts.Simulation.Bloons;
-using Il2CppAssets.Scripts.Models.Towers.Weapons.Behaviors;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions.Behaviors;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack.Behaviors;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions;
 using Il2CppAssets.Scripts.Models.Towers.Weapons;
 using Il2CppSystem.IO;
 using Il2CppAssets.Scripts.Simulation.Objects;
-using UnityEngine.InputSystem.Utilities;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors;
-using System.Threading;
-using Il2CppSystem.Runtime.InteropServices;
-using BTD_Mod_Helper.Api.Display;
-using Il2CppAssets.Scripts.Unity.Display;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities;
-using BTD_Mod_Helper.Api.Towers;
 using BTD_Mod_Helper.Api;
-using BTD_Mod_Helper.Api.Components;
-using BTD_Mod_Helper.Extensions;
-using UnityEngine;
-using BTD_Mod_Helper.Api.Enums;
-using TaskScheduler = BTD_Mod_Helper.Api.TaskScheduler;
-using Il2CppAssets.Scripts.Unity.UI_New.ChallengeEditor;
-using Il2CppAssets.Scripts.Utils;
-using Il2CppAssets.Scripts.Unity.UI_New;
-using Il2CppAssets.Scripts.Unity.Menu;
 using Il2CppTMPro;
 using Il2CppNinjaKiwi.Common;
-using Il2CppAssets.Scripts.Unity.UI_New.Quests;
-using Il2Cpp;
-using System.Linq;
-using MelonLoader;
 using AncientMonkey.Weapons;
-using Unity.XR.Oculus.Input;
-using BTD_Mod_Helper.Api.Helpers;
-using HarmonyLib;
-using Harmony;
-using Il2CppAssets.Scripts.Unity.Towers.Weapons;
 using BTD_Mod_Helper.Api.ModOptions;
-using UnityEngine.UIElements;
-using Il2CppAssets.Scripts.Unity.Towers.Upgrades;
-using Il2CppAssets.Scripts.Simulation.Towers.Behaviors.Abilities;
-using Il2CppAssets.Scripts.Unity.Gamepad;
 using AncientMonkey.Challenge;
-using System.Collections.Generic;
-using Il2CppAssets.Scripts.Unity.Bridge;
-using Il2CppAssets.Scripts.Models.Bloons;
 
 [assembly: MelonInfo(typeof(AncientMonkey.AncientMonkey), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
@@ -103,21 +44,18 @@ public class AncientMonkey : BloonsTD6Mod
     public static AncientMonkey mod;
     public float newWeaponCost = 250;
     public float baseNewWeaponCost = 250;
-    public float rareChance = 85;
-    public float epicChance = 100;
-    public float legendaryChance = 100;
+    public float uncommonChance = 85;
+    public float legendaryChance = 99;
     public float exoticChance = 100;
-    public float godlyChance = 100;
-    public float omegaChance = 100;
-    public float rareStrongChance = 85;
-    public float epicStrongChance = 100;
-    public float legendaryStrongChance = 100;
-    public float exoticStrongChance = 100;
-    public float godlyStrongerChance = 100;
-    public float omegaStrongerChance = 100;
+    public float voidChance = 100;
+    public float lunarChance = 100;
+    public float uncommonStrongChance = 0;
+    public float voidStrongChance = 100;
+    public float legendaryStrongChance = 80;
+    public float lunarStrongChance = 100;
     public float strongerWeaponCost = 1100;
-    public float baseStrongerWeaponCost = 1100;
-    public float newAbilityCost = 6500;
+    public float baseStrongerWeaponCost = 1100; //used for large chests
+    public float newAbilityCost = 1750;
     public float baseNewAbilityCost = 1750;
     public bool upgradeOpen = false;
     public bool selectingWeaponOpen = false;
@@ -149,9 +87,9 @@ public class AncientMonkey : BloonsTD6Mod
     public float Upgrade2Cost = 1000000;
     public float ExtraLuckCost = 250;
     public WeaponTemplate.Rarity minNewWeaponRarity = WeaponTemplate.Rarity.Common;
-    public WeaponTemplate.Rarity maxNewWeaponRarity = WeaponTemplate.Rarity.Exotic;
+    public WeaponTemplate.Rarity maxNewWeaponRarity = WeaponTemplate.Rarity.Legendary;
     public WeaponTemplate.Rarity minStrongWeaponRarity = WeaponTemplate.Rarity.Common;
-    public WeaponTemplate.Rarity maxStrongWeaponRarity = WeaponTemplate.Rarity.Exotic;
+    public WeaponTemplate.Rarity maxStrongWeaponRarity = WeaponTemplate.Rarity.Legendary;
 
     public ChallengeTemplate? activeChallenge = new None(); 
     public ChallengeTemplate selectedChallenge
@@ -163,7 +101,7 @@ public class AncientMonkey : BloonsTD6Mod
     {
        
         mod = this;
-    
+
         foreach (var weapon in ModContent.GetContent<WeaponTemplate>().OrderByDescending(c => c.mod == mod))
         {
             if (weapon.WeaponRarity == WeaponTemplate.Rarity.Common)
@@ -171,16 +109,10 @@ public class AncientMonkey : BloonsTD6Mod
                 Common.CommonWpn.Add(weapon.WeaponName);
                 Common.CommonImg.Add(weapon.Icon);
             }
-            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Rare)
+            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Uncommon)
             {
-                Rare.RareWpn.Add(weapon.WeaponName);
-                Rare.RareImg.Add(weapon.Icon);
-            }
-            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Epic)
-            {
-                Epic.EpicWpn.Add(weapon.WeaponName);
-                Epic.EpicImg.Add(weapon.Icon);
-                
+                Uncommon.UncommonWpn.Add(weapon.WeaponName);
+                Uncommon.UncommonImg.Add(weapon.Icon);
             }
             if (weapon.WeaponRarity == WeaponTemplate.Rarity.Legendary)
             {
@@ -192,15 +124,25 @@ public class AncientMonkey : BloonsTD6Mod
                 Exotic.ExoticWpn.Add(weapon.WeaponName);
                 Exotic.ExoticImg.Add(weapon.Icon);
             }
-            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Godly)
+            if (weapon.WeaponRarity == WeaponTemplate.Rarity.VoidCommon)
             {
-                Godly.GodlyWpn.Add(weapon.WeaponName);
-                Godly.GodlyImg.Add(weapon.Icon);
+                Common.CommonWpn.Add(weapon.WeaponName);
+                Common.CommonImg.Add(weapon.Icon);
             }
-            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Omega)
+            if (weapon.WeaponRarity == WeaponTemplate.Rarity.VoidUncommon)
             {
-                Omega.OmegaWpn.Add(weapon.WeaponName);
-                Omega.OmegaImg.Add(weapon.Icon);
+                Uncommon.UncommonWpn.Add(weapon.WeaponName);
+                Uncommon.UncommonImg.Add(weapon.Icon);
+            }
+            if (weapon.WeaponRarity == WeaponTemplate.Rarity.VoidLegendary)
+            {
+                Legendary.LegendaryWpn.Add(weapon.WeaponName);
+                Legendary.LegendaryImg.Add(weapon.Icon);
+            }
+            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Lunar)
+            {
+                Lunar.LunarWpn.Add(weapon.WeaponName);
+                Lunar.LunarImg.Add(weapon.Icon);
             }
         }
         foreach (var ability in ModContent.GetContent<AbilityTemplate>().OrderByDescending(c => c.mod == mod))
@@ -213,16 +155,17 @@ public class AncientMonkey : BloonsTD6Mod
     public void Reset()
     {
         newWeaponCost = 325 * mod.selectedChallenge.NewWeaponCostMult;
-        rareChance = 90;
-        epicChance = 100;
-        rareStrongChance = 90;
-        epicStrongChance = 100;
-        legendaryStrongChance = 100;
-        legendaryChance = 100;
+        uncommonChance = 90;
+        voidChance = 100;
+        uncommonChance = 85;
+        legendaryChance = 99;
         exoticChance = 100;
-        exoticStrongChance = 100;
-        omegaChance = 100;
-        omegaStrongerChance = 100;
+        voidChance = 100;
+        lunarChance = 100;
+        uncommonStrongChance = 0;
+        voidStrongChance = 100;
+        legendaryStrongChance = 80;
+        lunarStrongChance = 100;
         baseNewWeaponCost = 250 * mod.selectedChallenge.NewWeaponCostMult;
         strongerWeaponCost = 500 * mod.selectedChallenge.StrongerWeaponCostMult;
         baseStrongerWeaponCost = 500 * mod.selectedChallenge.StrongerWeaponCostMult;
@@ -259,7 +202,7 @@ public class AncientMonkey : BloonsTD6Mod
     }
     public override void OnTowerSold(Tower tower, float amount)
     {
-        if (tower.towerModel.name.Contains("AncientMonkey-AncientMonkey"))
+        if (tower.towerModel.name.Contains("AncientMonkey-Commando"))
         {
             Reset();
         }
@@ -270,7 +213,7 @@ public class AncientMonkey : BloonsTD6Mod
     }
     public override void OnTowerCreated(Tower tower, Entity target, Model modelToUse)
     {
-        if (tower.towerModel.name.Contains("AncientMonkey-AncientMonkey"))
+        if (tower.towerModel.name.Contains("AncientMonkey-Commando"))
         {
             InGame game = InGame.instance;
             RectTransform rect = game.uiRect;
@@ -285,7 +228,7 @@ public class AncientMonkey : BloonsTD6Mod
     {
         foreach (var tower in result.towerSet.ToList())
         {
-            if (tower.name.Contains("AncientMonkey-AncientMonkey"))
+            if (tower.name.Contains("AncientMonkey-Commando"))
             {
                 tower.GetShopTowerDetails().towerCount = 1;
             }
@@ -293,7 +236,7 @@ public class AncientMonkey : BloonsTD6Mod
     }
     public override void OnTowerSelected(Tower tower)
     {
-        if (tower.towerModel.name.Contains("AncientMonkey-AncientMonkey"))
+        if (tower.towerModel.name.Contains("AncientMonkey-Commando"))
         {
             InGame game = InGame.instance;
             RectTransform rect = game.uiRect;
@@ -303,7 +246,7 @@ public class AncientMonkey : BloonsTD6Mod
     }
     public override void OnTowerDeselected(Tower tower)
     {
-        if (tower.towerModel.name.Contains("AncientMonkey-AncientMonkey"))
+        if (tower.towerModel.name.Contains("AncientMonkey-Commando"))
         {
             InGame game = InGame.instance;
             RectTransform rect = game.uiRect;
@@ -374,30 +317,30 @@ public class AncientMonkey : BloonsTD6Mod
 
                 return;
             }
-            mod.rareChance -= 5f + mod.ExtraLuckLevel * 0.45f;
-            mod.epicChance -= 1.45f + mod.ExtraLuckLevel * 0.1f;
-            if (mod.epicChance <= 88)
-            {
-                mod.legendaryChance -= 0.85f + mod.ExtraLuckLevel * 0.06f;
-            }
-            if (mod.legendaryChance <= 91)
-            {
-                mod.exoticChance -= 0.50f + mod.ExtraLuckLevel * 0.04f;
-            }
-            if (mod.level >= 1)
-            {
-                if (mod.exoticChance <= 94)
-                {
-                    mod.godlyChance -= 0.3f + mod.ExtraLuckLevel * 0.025f;
-                }
-            }
-            if (mod.level >= 2)
-            {
-                if (mod.godlyChance <= 95)
-                {
-                    mod.omegaChance -= 0.15f + mod.ExtraLuckLevel * 0.01f;
-                }
-            }
+            //mod.rareChance -= 5f + mod.ExtraLuckLevel * 0.45f;
+            //mod.epicChance -= 1.45f + mod.ExtraLuckLevel * 0.1f;
+            //if (mod.epicChance <= 88)
+            //{
+                //mod.legendaryChance -= 0.85f + mod.ExtraLuckLevel * 0.06f;
+            //}
+            //if (mod.legendaryChance <= 91)
+            //{
+                //mod.exoticChance -= 0.50f + mod.ExtraLuckLevel * 0.04f;
+            //}
+            //if (mod.level >= 1)
+            //{
+                //if (mod.exoticChance <= 94)
+                //{
+                    //mod.godlyChance -= 0.3f + mod.ExtraLuckLevel * 0.025f;
+                //}
+            //}
+            //if (mod.level >= 2)
+            //{
+                //if (mod.godlyChance <= 95)
+                //{
+                    //mod.omegaChance -= 0.15f + mod.ExtraLuckLevel * 0.01f;
+                //}
+            //}
             mod.XP += 1;
           
             if (mod.upgradeOpen == true && !SandboxMode)
@@ -431,30 +374,31 @@ public class AncientMonkey : BloonsTD6Mod
         }
         public static ModHelperPanel CreateWeapon(WeaponTemplate weapon, Tower tower )
         {
-            var sprite = VanillaSprites.GreyInsertPanel;
-            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Rare)
+            var sprite = VanillaSprites.GreyInsertPanel; //common
+
+            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Uncommon)
+            {
+                sprite = VanillaSprites.InsertPanelWhite;
+            }
+            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Lunar) //|| weapon.WeaponRarity == WeaponTemplate.Rarity.LunarEquipment) //luner
             {
                 sprite = VanillaSprites.BlueInsertPanel;
             }
-            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Epic)
+            if (weapon.WeaponRarity == WeaponTemplate.Rarity.VoidCommon || weapon.WeaponRarity == WeaponTemplate.Rarity.VoidUncommon || weapon.WeaponRarity == WeaponTemplate.Rarity.VoidLegendary || weapon.WeaponRarity == WeaponTemplate.Rarity.VoidExotic) //void
             {
                 sprite = VanillaSprites.MainBgPanelParagon;
             }
-            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Legendary)
+            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Legendary) 
             {
-                sprite = VanillaSprites.MainBGPanelYellow;
+                sprite = VanillaSprites.InsertPanelWhite; // 
             }
             if (weapon.WeaponRarity == WeaponTemplate.Rarity.Exotic)
             {
-                sprite = VanillaSprites.MainBgPanelWhiteSmall;
+                sprite = VanillaSprites.MainBGPanelYellow;
             }
-            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Godly)
+            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Uncommon)
             {
-                sprite = VanillaSprites.MainBGPanelSilver;
-            }
-            if (weapon.WeaponRarity == WeaponTemplate.Rarity.Omega)
-            {
-                sprite = VanillaSprites.MainBgPanelHematite;
+                sprite = VanillaSprites.InsertPanelWhite;
             }
             var panel = ModHelperPanel.Create(new Info("WeaponContent" + weapon.WeaponName, 0, 0, 2250, 150), sprite);
             MenuUi upgradeUi = panel.AddComponent<MenuUi>();
@@ -462,14 +406,14 @@ public class AncientMonkey : BloonsTD6Mod
             ModHelperText rarity = panel.AddText(new Info("rarity", 275, 0, 600, 150), weapon.WeaponRarity.ToString(), 80, TextAlignmentOptions.MidlineLeft);
             ModHelperImage image = panel.AddImage(new Info("image", -100, 0, 140, 140), weapon.Icon);
             ModHelperButton selectWpnBtn = panel.AddButton(new Info("selectWpnBtn", 900, 0, 400, 120), VanillaSprites.GreenBtnLong, new System.Action(() => { upgradeUi.WeaponSelected(weapon.WeaponName, tower, false);}) ) ;
-            if(weapon.IsCamo)
-            {
-                ModHelperImage camoImg = panel.AddImage(new Info("camoImg", 460, 0, 120, 120), VanillaSprites.CamoBloonIcon);
-            }
-            if (weapon.IsLead)
-            {
-                ModHelperImage leadImg = panel.AddImage(new Info("leadImg", 580, 0, 120, 120), VanillaSprites.LeadBloonIcon);
-            }
+            //if(weapon.IsCamo)
+            //{
+                //ModHelperImage camoImg = panel.AddImage(new Info("camoImg", 460, 0, 120, 120), VanillaSprites.CamoBloonIcon);
+            //}
+            //if (weapon.IsLead)
+            //{
+                //ModHelperImage leadImg = panel.AddImage(new Info("leadImg", 580, 0, 120, 120), VanillaSprites.LeadBloonIcon);
+            //}
             ModHelperText selectWpn = selectWpnBtn.AddText(new Info("selectWpn", 0, 0, 700, 160), "Select", 60);
             return panel;
         }
@@ -545,85 +489,100 @@ public class AncientMonkey : BloonsTD6Mod
                 var RarityNumber = 1;
                 var MinNum = 1;
                 var MaxNum = 1;
+                var CanVoid = false;
+                // should only be [Common to Legendary] or [VoidCommon to VoidLegendary]
                 if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Common)
                 {
                     MinNum = 1;
                 }
-                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Rare)
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Uncommon)
                 {
                     MinNum = 2;
                 }
-                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Epic)
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Legendary)
                 {
                     MinNum = 3;
                 }
-                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Legendary)
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Exotic)
                 {
                     MinNum = 4;
                 }
-                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Exotic)
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Lunar)
                 {
                     MinNum = 5;
                 }
-                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Godly)
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.VoidCommon)
                 {
                     MinNum = 6;
                 }
-                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Omega)
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.VoidUncommon)
                 {
                     MinNum = 7;
+                }
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.VoidLegendary)
+                {
+                    MinNum = 8;
+                }
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.VoidExotic)
+                {
+                    MinNum = 9;
                 }
                 if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Common)
                 {
                     MaxNum = 1;
                 }
-                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Rare)
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Uncommon)
                 {
                     MaxNum = 2;
                 }
-                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Epic)
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Legendary)
                 {
                     MaxNum = 3;
                 }
-                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Legendary)
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Exotic)
                 {
                     MaxNum = 4;
                 }
-                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Exotic)
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Lunar)
                 {
                     MaxNum = 5;
                 }
-                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Godly)
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.VoidCommon)
                 {
                     MaxNum = 6;
                 }
-                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Omega)
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.VoidUncommon)
                 {
                     MaxNum = 7;
                 }
-                if (WpnRarityNum >= mod.rareChance)
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.VoidLegendary)
+                {
+                    MaxNum = 8;
+                }
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.VoidExotic)
+                {
+                    MaxNum = 9;
+                }
+                //if (WpnRarityNum >= mod.rareChance)
+                //{
+                //RarityNumber = 2;
+                //}
+
+                if (WpnRarityNum >= mod.uncommonChance)
                 {
                     RarityNumber = 2;
                 }
-                if (WpnRarityNum >= mod.epicChance)
+                if (WpnRarityNum >= mod.legendaryChance)
                 {
                     RarityNumber = 3;
                 }
-                if (WpnRarityNum >= mod.legendaryChance)
+                if (WpnRarityNum >= mod.exoticChance)
                 {
                     RarityNumber = 4;
                 }
-                if (WpnRarityNum >= mod.exoticChance)
+                if (WpnRarityNum >= mod.voidChance)
                 {
                     RarityNumber = 5;
-                }
-                if (WpnRarityNum >= mod.godlyChance)
-                {
-                    RarityNumber = 6;
-                }
-                if (WpnRarityNum >= mod.omegaChance)
-                {
-                    RarityNumber = 7;
                 }
                 if (RarityNumber < MinNum)
                 {
@@ -635,46 +594,32 @@ public class AncientMonkey : BloonsTD6Mod
                 }
                 if (RarityNumber == 2)
                 {
-                     WpnRarity = "Rare";
+                     WpnRarity = "Uncommon";
                 }
                 if (RarityNumber == 3)
                 {
-                    WpnRarity = "Epic";
+                    WpnRarity = "Legendary";
                 }
                 if (RarityNumber == 4)
                 {
-                    WpnRarity = "Legendary";
+                    WpnRarity = "Exotic";
                 }
                 if (RarityNumber == 5)
                 {
-                    WpnRarity = "Exotic";
-                }
-                if (RarityNumber == 6)
-                {
-                    WpnRarity = "Godly";
-                }
-                if (RarityNumber == 7)
-                {
-                    WpnRarity = "Omega";
+                    WpnRarity = "Lunar";
                 }
 
                 var sprite = VanillaSprites.GreyInsertPanel;
                 var numWpn = rnd.Next(0, Common.CommonWpn.Count);
                 var weapon = Common.CommonWpn[numWpn];
                 var img = Common.CommonImg[numWpn];
-                if (WpnRarity == "Rare")
+
+                if (WpnRarity == "Uncommon")
                 {
-                    numWpn = rnd.Next(0, Rare.RareWpn.Count);
-                    sprite = VanillaSprites.BlueInsertPanel;
-                    weapon = Rare.RareWpn[numWpn];
-                    img = Rare.RareImg[numWpn];
-                }
-                if (WpnRarity == "Epic")
-                {
-                    numWpn = rnd.Next(0, Epic.EpicWpn.Count);
-                    sprite = VanillaSprites.MainBgPanelParagon;
-                    weapon = Epic.EpicWpn[numWpn];
-                    img = Epic.EpicImg[numWpn];
+                    numWpn = rnd.Next(0, Uncommon.UncommonWpn.Count);
+                    sprite = VanillaSprites.MainBgPanelWhiteSmall;
+                    weapon = Uncommon.UncommonWpn[numWpn];
+                    img = Uncommon.UncommonImg[numWpn];
                 }
                 if (WpnRarity == "Legendary")
                 {
@@ -686,24 +631,16 @@ public class AncientMonkey : BloonsTD6Mod
                 if (WpnRarity == "Exotic")
                 {
                     numWpn = rnd.Next(0, Exotic.ExoticWpn.Count);
-                    sprite = VanillaSprites.MainBgPanelWhiteSmall;
+                    sprite = VanillaSprites.MainBGPanelYellow;
                     weapon = Exotic.ExoticWpn[numWpn];
                     img = Exotic.ExoticImg[numWpn];
                 }
-                if (WpnRarity == "Godly")
+                if (WpnRarity == "Lunar")
                 {
-                    numWpn = rnd.Next(0, Godly.GodlyWpn.Count);
-                    sprite = VanillaSprites.MainBGPanelSilver;
-                    weapon = Godly.GodlyWpn[numWpn];
-                    img = Godly.GodlyImg[numWpn];
-                }
-                if (WpnRarity == "Omega")
-                {
-                    numWpn = rnd.Next(0, Omega.OmegaWpn.Count);
-                    sprite = VanillaSprites.MainBgPanelHematite;
-
-                    weapon = Omega.OmegaWpn[numWpn];
-                    img = Omega.OmegaImg[numWpn];
+                    numWpn = rnd.Next(0, Lunar.LunarWpn.Count);
+                    sprite = VanillaSprites.BlueInsertPanel;
+                    weapon = Lunar.LunarWpn[numWpn];
+                    img = Lunar.LunarImg[numWpn];
                 }
                 ModHelperPanel wpnPanel = panel.AddPanel(new Info("wpnPanel", weaponPanelX, weaponPanelY, 650, 1450, new UnityEngine.Vector2()), sprite);
                 ModHelperText rarityText = panel.AddText(new Info("rarityText", wpnContentX, 600, 800, 180), WpnRarity, 100);
@@ -738,6 +675,243 @@ public class AncientMonkey : BloonsTD6Mod
                 weaponPanelX += weaponPanelWidth;
                 wpnContentX += weaponPanelWidth;
                
+            }
+        }
+        public static void NewLargeWeaponPanel(RectTransform rect, Tower tower, bool Levelup)
+        {
+            mod.panelOpen = true;
+            if (instance)
+            {
+                instance.CloseMenu();
+            }
+
+            if (SandboxMode)
+            {
+                SandBoxWeaponPanel(rect, tower);
+                return;
+            }
+            float weaponPanelWidth = 833.33f;
+            float weaponPanelX = 412.5f;
+            float weaponPanelY = 900;
+            float wpnContentX = 25 - (mod.newWeaponSlot - 1) * 425;
+            float panelWidth = mod.newWeaponSlot * weaponPanelWidth;
+            var imag = VanillaSprites.BrownInsertPanel;
+            if (mod.level == 1)
+            {
+                imag = VanillaSprites.BlueInsertPanel;
+            }
+            if (mod.level == 2)
+            {
+                imag = VanillaSprites.MainBgPanelParagon;
+            }
+            ModHelperPanel panel = rect.gameObject.AddModHelperPanel(new Info("Panel_", 2200, 1500, panelWidth, 1850, new UnityEngine.Vector2()), imag);
+
+            MenuUi upgradeUi = panel.AddComponent<MenuUi>();
+            ModHelperText selectWpn = panel.AddText(new Info("selectWpn", 0, 800, 2500, 180), "Select New Weapon", 100);
+            if (!instance)
+            {
+                selectWpn.Text.text = "Choose A starter Weapon";
+                selectWpn.Text.color = new Color(0, 1, 0);
+            }
+            if (Levelup)
+            {
+                selectWpn.Text.text = "Choose A level up Weapon";
+                selectWpn.Text.color = new Color(0.46f, 0, 0.78f);
+            }
+            Il2CppSystem.Random rnd = new Il2CppSystem.Random();
+            for (int i = 0; i < mod.newWeaponSlot; i++)
+            {
+                var WpnRarityNum = rnd.Next(1, 100);
+                var WpnRarity = "Common";
+                var RarityNumber = 1;
+                var MinNum = 1;
+                var MaxNum = 1;
+                var CanVoid = false;
+                // should only be [Common to Legendary] or [VoidCommon to VoidLegendary]
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Common)
+                {
+                    MinNum = 1;
+                }
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Uncommon)
+                {
+                    MinNum = 2;
+                }
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Legendary)
+                {
+                    MinNum = 3;
+                }
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Exotic)
+                {
+                    MinNum = 4;
+                }
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Lunar)
+                {
+                    MinNum = 5;
+                }
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.VoidCommon)
+                {
+                    MinNum = 6;
+                }
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.VoidUncommon)
+                {
+                    MinNum = 7;
+                }
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.VoidLegendary)
+                {
+                    MinNum = 8;
+                }
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.VoidExotic)
+                {
+                    MinNum = 9;
+                }
+                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Common)
+                {
+                    MaxNum = 1;
+                }
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Uncommon)
+                {
+                    MaxNum = 2;
+                }
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Legendary)
+                {
+                    MaxNum = 3;
+                }
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Exotic)
+                {
+                    MaxNum = 4;
+                }
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Lunar)
+                {
+                    MaxNum = 5;
+                }
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.VoidCommon)
+                {
+                    MaxNum = 6;
+                }
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.VoidUncommon)
+                {
+                    MaxNum = 7;
+                }
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.VoidLegendary)
+                {
+                    MaxNum = 8;
+                }
+                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.VoidExotic)
+                {
+                    MaxNum = 9;
+                }
+                //if (WpnRarityNum >= mod.rareChance)
+                //{
+                //RarityNumber = 2;
+                //}
+
+                if (WpnRarityNum >= mod.uncommonChance)
+                {
+                    RarityNumber = 2;
+                }
+                if (WpnRarityNum >= mod.legendaryChance)
+                {
+                    RarityNumber = 3;
+                }
+                if (WpnRarityNum >= mod.exoticChance)
+                {
+                    RarityNumber = 4;
+                }
+                if (WpnRarityNum >= mod.voidChance)
+                {
+                    RarityNumber = 5;
+                }
+                if (RarityNumber < MinNum)
+                {
+                    RarityNumber = MinNum;
+                }
+                if (RarityNumber > MaxNum)
+                {
+                    RarityNumber = MaxNum;
+                }
+                if (RarityNumber == 2)
+                {
+                    WpnRarity = "Uncommon";
+                }
+                if (RarityNumber == 3)
+                {
+                    WpnRarity = "Legendary";
+                }
+                if (RarityNumber == 4)
+                {
+                    WpnRarity = "Exotic";
+                }
+                if (RarityNumber == 5)
+                {
+                    WpnRarity = "Lunar";
+                }
+
+                var sprite = VanillaSprites.GreyInsertPanel;
+                var numWpn = rnd.Next(0, Common.CommonWpn.Count);
+                var weapon = Common.CommonWpn[numWpn];
+                var img = Common.CommonImg[numWpn];
+
+                if (WpnRarity == "Uncommon")
+                {
+                    numWpn = rnd.Next(0, Uncommon.UncommonWpn.Count);
+                    sprite = VanillaSprites.MainBgPanelWhiteSmall;
+                    weapon = Uncommon.UncommonWpn[numWpn];
+                    img = Uncommon.UncommonImg[numWpn];
+                }
+                if (WpnRarity == "Legendary")
+                {
+                    numWpn = rnd.Next(0, Legendary.LegendaryWpn.Count);
+                    sprite = VanillaSprites.MainBGPanelYellow;
+                    weapon = Legendary.LegendaryWpn[numWpn];
+                    img = Legendary.LegendaryImg[numWpn];
+                }
+                if (WpnRarity == "Exotic")
+                {
+                    numWpn = rnd.Next(0, Exotic.ExoticWpn.Count);
+                    sprite = VanillaSprites.MainBGPanelYellow;
+                    weapon = Exotic.ExoticWpn[numWpn];
+                    img = Exotic.ExoticImg[numWpn];
+                }
+                if (WpnRarity == "Lunar")
+                {
+                    numWpn = rnd.Next(0, Lunar.LunarWpn.Count);
+                    sprite = VanillaSprites.BlueInsertPanel;
+                    weapon = Lunar.LunarWpn[numWpn];
+                    img = Lunar.LunarImg[numWpn];
+                }
+                ModHelperPanel wpnPanel = panel.AddPanel(new Info("wpnPanel", weaponPanelX, weaponPanelY, 650, 1450, new UnityEngine.Vector2()), sprite);
+                ModHelperText rarityText = panel.AddText(new Info("rarityText", wpnContentX, 600, 800, 180), WpnRarity, 100);
+                ModHelperText weaponText = panel.AddText(new Info("weaponText", wpnContentX, 500, 800, 180), weapon, 75);
+
+                ModHelperImage image = panel.AddImage(new Info("image", wpnContentX, 0, 400, 400), img);
+                ModHelperButton selectWpnBtn = panel.AddButton(new Info("selectWpnBtn", wpnContentX, -600, 500, 160), VanillaSprites.GreenBtnLong, new System.Action(() => upgradeUi.WeaponSelected(weapon, tower, Levelup)));
+                ModHelperText selectWpnTxt = selectWpnBtn.AddText(new Info("selectWpnTxt", 0, 0, 700, 160), "Select", 70);
+                foreach (var weaponContent in ModContent.GetContent<WeaponTemplate>().OrderByDescending(c => c.mod == mod))
+                {
+                    if (weaponContent.WeaponName == weapon)
+                    {
+                        if (weaponContent.IsModded)
+                        {
+                            weaponText = panel.AddText(new Info("weaponText", wpnContentX, 500, 800, 180), weapon + " (" + weaponContent.ModName + " Mod)", 75);
+                        }
+                        if (weaponContent.IsCamo && !weaponContent.IsLead)
+                        {
+                            ModHelperImage camoImg = panel.AddImage(new Info("camoImg", wpnContentX + 275, 650, 100, 100), VanillaSprites.CamoBloonIcon);
+                        }
+                        if (weaponContent.IsLead && !weaponContent.IsCamo)
+                        {
+                            ModHelperImage leadImg = panel.AddImage(new Info("leadImg", wpnContentX + 275, 650, 100, 100), VanillaSprites.LeadBloonIcon);
+                        }
+                        if (weaponContent.IsLead && weaponContent.IsCamo)
+                        {
+                            ModHelperImage camoImg = panel.AddImage(new Info("camoImg", wpnContentX + 275, 650, 100, 100), VanillaSprites.CamoBloonIcon);
+                            ModHelperImage leadImg = panel.AddImage(new Info("leadImg", wpnContentX + 275, 560, 100, 100), VanillaSprites.LeadBloonIcon);
+                        }
+                    }
+                }
+                weaponPanelX += weaponPanelWidth;
+                wpnContentX += weaponPanelWidth;
+
             }
         }
         public static void SandBoxStrongWeaponPanel(RectTransform rect, Tower tower)
@@ -844,14 +1018,6 @@ public class AncientMonkey : BloonsTD6Mod
                 {
                     MinNum = 1;
                 }
-                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Rare)
-                {
-                    MinNum = 2;
-                }
-                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Epic)
-                {
-                    MinNum = 3;
-                }
                 if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Legendary)
                 {
                     MinNum = 4;
@@ -860,25 +1026,9 @@ public class AncientMonkey : BloonsTD6Mod
                 {
                     MinNum = 5;
                 }
-                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Godly)
-                {
-                    MinNum = 6;
-                }
-                if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Omega)
-                {
-                    MinNum = 7;
-                }
                 if (mod.minNewWeaponRarity == WeaponTemplate.Rarity.Common)
                 {
                     MaxNum = 1;
-                }
-                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Rare)
-                {
-                    MaxNum = 2;
-                }
-                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Epic)
-                {
-                    MaxNum = 3;
                 }
                 if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Legendary)
                 {
@@ -888,37 +1038,9 @@ public class AncientMonkey : BloonsTD6Mod
                 {
                     MaxNum = 5;
                 }
-                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Godly)
-                {
-                    MaxNum = 6;
-                }
-                if (mod.maxNewWeaponRarity == WeaponTemplate.Rarity.Omega)
-                {
-                    MaxNum = 7;
-                }
-                if (StrongWpnRarityNum >= mod.rareStrongChance)
-                {
-                    RarityNumber = 2;
-                }
-                if (StrongWpnRarityNum >= mod.epicStrongChance)
-                {
-                    RarityNumber = 3;
-                }
                 if (StrongWpnRarityNum >= mod.legendaryStrongChance)
                 {
                     RarityNumber = 4;
-                }
-                if (StrongWpnRarityNum >= mod.exoticStrongChance)
-                {
-                    RarityNumber = 5;
-                }
-                if (StrongWpnRarityNum >= mod.godlyStrongerChance)
-                {
-                    RarityNumber = 6;
-                }
-                if (StrongWpnRarityNum >= mod.omegaStrongerChance)
-                {
-                    RarityNumber = 7;
                 }
                 if (RarityNumber < MinNum)
                 {
@@ -1030,7 +1152,7 @@ public class AncientMonkey : BloonsTD6Mod
             if (SandboxMode)
             {
                 RectTransform rect = game.uiRect;
-                MenuUi.StrongWeaponPanel(rect, tower);
+                MenuUi.NewLargeWeaponPanel(rect, tower, false);
                 MenuUi.instance.CloseMenu();
 
                 return;
@@ -1040,10 +1162,10 @@ public class AncientMonkey : BloonsTD6Mod
             {
                 game.AddCash(-mod.strongerWeaponCost);
                 RectTransform rect = game.uiRect;
-                MenuUi.StrongWeaponPanel(rect, tower);
+                MenuUi.NewLargeWeaponPanel(rect, tower, false);
                 mod.strongerWeaponCost += mod.baseStrongerWeaponCost;
                 tower.worth += mod.strongerWeaponCost - mod.baseStrongerWeaponCost;
-                mod.baseStrongerWeaponCost *= 1.06f;
+                mod.baseStrongerWeaponCost *= 1.12f;
                 
          
                 MenuUi.instance.CloseMenu();
@@ -1147,24 +1269,6 @@ public class AncientMonkey : BloonsTD6Mod
             foreach (var attackModel in towerModel.GetDescendants<AttackModel>().ToArray())
             {
                 attackModel.range *= Range;
-            }
-            mod.rareStrongChance -= 6.7f + mod.ExtraLuckLevel * 0.55f;
-            mod.epicStrongChance -= 2f + mod.ExtraLuckLevel * 0.15f;
-            if (mod.epicStrongChance <= 88)
-            {
-                mod.legendaryStrongChance -= 1.15f + mod.ExtraLuckLevel * 0.09f;
-            }
-            if (mod.legendaryStrongChance <= 91)
-            {
-                mod.exoticStrongChance -= 0.75f + mod.ExtraLuckLevel * 0.05f;
-            }
-            if (mod.exoticStrongChance <= 93)
-            {
-                mod.godlyStrongerChance -= 0.55f + mod.ExtraLuckLevel * 0.03f;
-            }
-            if (mod.godlyChance <= 94)
-            {
-                mod.omegaStrongerChance -= 0.30f + mod.ExtraLuckLevel * 0.015f;
             }
             tower.UpdateRootModel(towerModel);
            
@@ -1542,16 +1646,9 @@ public class AncientMonkey : BloonsTD6Mod
             
                 mod.newWeaponCost = 450 * mod.selectedChallenge.NewWeaponCostMult;
                 mod.baseNewWeaponCost = 350 * mod.selectedChallenge.NewWeaponCostMult;
-                mod.rareChance = 0;
-                mod.epicChance = 75;
                 mod.legendaryChance = 98;
                 mod.exoticChance = 100;
-                mod.godlyChance = 100;
-                mod.rareStrongChance = 0;
-                mod.epicStrongChance = 70;
                 mod.legendaryStrongChance = 95;
-                mod.exoticStrongChance = 100;
-                mod.godlyStrongerChance = 100;
                 mod.strongerWeaponCost = 950 * mod.selectedChallenge.StrongerWeaponCostMult;
                 mod.baseStrongerWeaponCost = 750 * mod.selectedChallenge.StrongerWeaponCostMult;
                 mod.newAbilityCost = 6000 * mod.selectedChallenge.AbilityWeaponCostMult;
@@ -1585,16 +1682,9 @@ public class AncientMonkey : BloonsTD6Mod
 
                 mod.newWeaponCost = 2350 * mod.selectedChallenge.NewWeaponCostMult;
                 mod.baseNewWeaponCost = 1750 * mod.selectedChallenge.NewWeaponCostMult;
-                mod.rareChance = 0;
-                mod.epicChance = 0;
                 mod.legendaryChance = 80;
                 mod.exoticChance = 99;
-                mod.godlyChance = 100;
-                mod.rareStrongChance = 0;
-                mod.epicStrongChance = 0;
                 mod.legendaryStrongChance = 75;
-                mod.exoticStrongChance = 98;
-                mod.godlyStrongerChance = 100;
                 mod.strongerWeaponCost = 3500 * mod.selectedChallenge.StrongerWeaponCostMult;
                 mod.baseStrongerWeaponCost = 2250 * mod.selectedChallenge.StrongerWeaponCostMult;
                 mod.newAbilityCost = 5500 * mod.selectedChallenge.AbilityWeaponCostMult;

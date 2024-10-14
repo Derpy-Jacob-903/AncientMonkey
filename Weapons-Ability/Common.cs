@@ -17,284 +17,245 @@ using System.Diagnostics;
 using Il2Cpp;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
+using Il2CppAssets.Scripts.Models.Towers.Weapons;
+using Il2CppSystem.IO;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities;
+using Il2CppAssets.Scripts.Models.Towers.TowerFilters;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Il2CppAssets.Scripts.Models.Towers.Projectiles;
+using Il2CppAssets.Scripts.Simulation.SimulationBehaviors;
+using HarmonyLib;
+using Il2CppAssets.Scripts.Models;
+using Il2CppAssets.Scripts.Models.Gameplay.Mods;
+using AncientMonkey;
 
 namespace AncientMonkey.Weapons
 {
-    public class Dart : WeaponTemplate
+    public class APRounds : WeaponTemplate
     {
         public override int SandboxIndex => 1;
         public override Rarity WeaponRarity => Rarity.Common;
-        public override string WeaponName => "Dart";
-        public override string Icon => VanillaSprites.SharpShotsUpgradeIcon;
+        public override string WeaponName => "Armor-Piercing Rounds";
+        public override string Icon => GetSpriteReference("texAPRoundsIcon").GUID;
         public override void EditTower(Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            var wpn = Game.instance.model.GetTowerFromId("DartMonkey").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            towerModel.AddBehavior(wpn);
+            //var hasItem = new DamageModifierForTagModel("", "balls", 0, 0, true, true);
+            foreach (var i in towerModel.GetDescendants<WeaponModel>().ToArray())
+            {
+                foreach (var n in i.GetDescendants<DamageModifierForTagModel>().ToArray())
+                {
+                    if (n.name == "Armor-Piercing Rounds")
+                    {
+                        n.damageMultiplier += 0.2f;
+                    }
+                    else
+                    {
+                        towerModel.AddBehavior(new DamageModifierForTagModel("Armor-Piercing Rounds", "Moabs", 1.2f, 0, true, true));
+                    }
+                }
+            }
             tower.UpdateRootModel(towerModel);
         }
     }
-    public class Boomerang : WeaponTemplate
+    public class Crowbar : WeaponTemplate
     {
         public override int SandboxIndex => 1;
         public override Rarity WeaponRarity => Rarity.Common;
-        public override string WeaponName => "Boomerang";
-        public override string Icon => VanillaSprites.ImprovedRangsUpgradeIcon;
+        public override string WeaponName => "Crowbar?";
+        public override string Icon => GetSpriteReference("texCrowbarIcon").GUID;
         public override void EditTower(Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            var wpn = Game.instance.model.GetTowerFromId("BoomerangMonkey").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            towerModel.AddBehavior(wpn);
+            //var hasItem = new DamageModifierForTagModel("", "balls", 0, 0, true, true);
+            foreach (var i in towerModel.GetDescendants<WeaponModel>().ToArray())
+            {
+                foreach (var n in i.GetDescendants<DamageModifierForTagModel>().ToArray())
+                {
+                    if (n.name == "Armor-Piercing Rounds")
+                    {
+                        n.damageMultiplier += 0.75f;
+                    }
+                    else
+                    {
+                        towerModel.AddBehavior(new DamageModifierForTagModel("Crowbar", "ProcCrowbar", 1.75f, 0, true, true));
+                    }
+                }
+            }
             tower.UpdateRootModel(towerModel);
         }
     }
-    public class Tack : WeaponTemplate
+    public class FocusCrystal : WeaponTemplate
     {
         public override int SandboxIndex => 1;
         public override Rarity WeaponRarity => Rarity.Common;
-        public override string Icon => VanillaSprites.FasterShootingUpgradeIcon;
-        public override string WeaponName => "Tack";
+        public override string WeaponName => "Focus Crystal?";
+        public override string Icon => GetSpriteReference("texCrowbarIcon").GUID;
         public override void EditTower(Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            var wpn = Game.instance.model.GetTowerFromId("TackShooter").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            towerModel.AddBehavior(wpn);
+            //var hasItem = new DamageModifierForTagModel("", "balls", 0, 0, true, true);
+            foreach (var i in towerModel.GetDescendants<WeaponModel>().ToArray())
+            {
+                foreach (var n in i.GetDescendants<DamageModifierForTagModel>().ToArray())
+                {
+                    if (n.name == "Focus Crystal")
+                    {
+                        n.damageMultiplier += 0.20f;
+                    }
+                    else
+                    {
+                        towerModel.AddBehavior(new DamageModifierForTagModel("Focus Crystal", "ProcFocusCrystal", 1.2f, 0, true, true));
+                    }
+                }
+            }
             tower.UpdateRootModel(towerModel);
         }
     }
-    public class Nail : WeaponTemplate
+    public class BackupMagazine : WeaponTemplate
     {
         public override int SandboxIndex => 1;
         public override Rarity WeaponRarity => Rarity.Common;
-        public override string Icon => VanillaSprites.LargerServiceAreaUpgradeIcon;
-        public override string WeaponName => "Nail";
-        public override void EditTower(Tower tower)
-        {
-            var wpn = Game.instance.model.GetTowerFromId("EngineerMonkey").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            towerModel.AddBehavior(wpn);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class Glue : WeaponTemplate
-    {
-        public override int SandboxIndex => 1;
-        public override Rarity WeaponRarity => Rarity.Common;
-        public override string Icon => VanillaSprites.GlueSoakUpgradeIcon;
-        public override string WeaponName => "Glue";
-        public override bool IsLead => true;
-        public override void EditTower(Tower tower)
-        {
-            var wpn = Game.instance.model.GetTowerFromId("GlueGunner").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            towerModel.AddBehavior(wpn);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class Bomb : WeaponTemplate
-    {
-        public override int SandboxIndex => 1;
-        public override Rarity WeaponRarity => Rarity.Common;
-        public override string Icon => VanillaSprites.BiggerBombsUpgradeIcon;
-        public override string WeaponName => "Bomb";
-        public override bool IsLead => true;
-        public override void EditTower(Tower tower)
-        {
-            var wpn = Game.instance.model.GetTowerFromId("BombShooter").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            towerModel.AddBehavior(wpn);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class Magic : WeaponTemplate
-    {
-        public override int SandboxIndex => 1;
-        public override Rarity WeaponRarity => Rarity.Common;
-        public override string Icon => VanillaSprites.IntenseMagicUpgradeIcon;
-        public override string WeaponName => "Magic";
-        public override void EditTower(Tower tower)
-        {
-            var wpn = Game.instance.model.GetTowerFromId("WizardMonkey").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            towerModel.AddBehavior(wpn);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class Quincy : WeaponTemplate
-    {
-        public override int SandboxIndex => 1;
-        public override Rarity WeaponRarity => Rarity.Common;
-        public override string Icon => VanillaSprites.QuincyIcon;
-        public override string WeaponName => "Quincy";
-        public override void EditTower(Tower tower)
-        {
-            var wpn = Game.instance.model.GetTowerFromId("Quincy").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            towerModel.AddBehavior(wpn);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class Shuriken : WeaponTemplate
-    {
-        public override int SandboxIndex => 1;
-        public override Rarity WeaponRarity => Rarity.Common;
-        public override string Icon => VanillaSprites.SharpShurikensUpgradeIcon;
-        public override string WeaponName => "Shuriken";
-        public override bool IsCamo => true;
-        public override void EditTower(Tower tower)
-        {
-            var wpn = Game.instance.model.GetTowerFromId("NinjaMonkey").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            towerModel.AddBehavior(wpn);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class Ezili : WeaponTemplate
-    {
-        public override int SandboxIndex => 1;
-        public override Rarity WeaponRarity => Rarity.Common;
-        public override string Icon => VanillaSprites.EziliIcon;
-        public override string WeaponName => "Ezili";
-        public override bool IsCamo => true;
-        public override bool IsLead => true;
-        public override void EditTower(Tower tower)
-        {
-            var wpn = Game.instance.model.GetTowerFromId("Ezili").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            towerModel.AddBehavior(wpn);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class Sniper : WeaponTemplate
-    {
-        public override int SandboxIndex => 1;
-        public override Rarity WeaponRarity => Rarity.Common;
-        public override string Icon => VanillaSprites.EvenFasterFiringUpgradeIcon;
-        public override string WeaponName => "Sniper";
-        public override void EditTower(Tower tower)
-        {
-            var wpn = Game.instance.model.GetTowerFromId("SniperMonkey").GetAttackModel().Duplicate();
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            towerModel.AddBehavior(wpn);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class Thorn : WeaponTemplate
-    {
-        public override int SandboxIndex => 1;
-        public override Rarity WeaponRarity => Rarity.Common;
-        public override string Icon => VanillaSprites.ThornSwarmUpgradeIcon;
-        public override string WeaponName => "Thorn";
-        public override void EditTower(Tower tower)
-        {
-            var wpn = Game.instance.model.GetTowerFromId("Druid").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            towerModel.AddBehavior(wpn);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class Sub : WeaponTemplate
-    {
-        public override int SandboxIndex => 1;
-        public override Rarity WeaponRarity => Rarity.Common;
-        public override string WeaponName => "Sub";
-        public override string Icon => VanillaSprites.BarbedDartsUpgradeIcon;
+        public override string WeaponName => "Backup Magazine";
+        public override string Icon => GetSpriteReference("Iconpng").GUID;
         public override void EditTower(Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            var wpn = Game.instance.model.GetTowerFromId("MonkeySub").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            towerModel.AddBehavior(wpn);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class MonkeyAce : WeaponTemplate
-    {
-        public override int SandboxIndex => 1;
-        public override Rarity WeaponRarity => Rarity.Common;
-        public override string WeaponName => "Monkey Ace";
-        public override string Icon => VanillaSprites.RapidFireUpgradeIcon;
-        public override void EditTower(Tower tower)
-        {
-            var phoenix = Game.instance.model.GetTowerFromId("WizardMonkey-050").GetBehavior<TowerCreateTowerModel>().Duplicate();
-            var ace = Game.instance.model.GetTowerFromId("MonkeyAce").GetBehavior<AirUnitModel>().Duplicate();
-            var wpn = Game.instance.model.GetTowerFromId("MonkeyAce").GetBehavior<AttackAirUnitModel>().Duplicate();
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            ace.AddBehavior(wpn);
-            phoenix.towerModel.ApplyDisplay<blankdisplay.BlankDisplay>();
-            phoenix.towerModel.RemoveBehavior<AttackModel>();
-            phoenix.towerModel.RemoveBehavior<PathMovementFromScreenCenterModel>();
-            phoenix.towerModel.RemoveBehavior<CreateEffectOnPlaceModel>();
-            phoenix.towerModel.RemoveBehavior<Il2CppAssets.Scripts.Models.Towers.Behaviors.CreateEffectOnExpireModel>();
-            phoenix.towerModel.AddBehavior(ace);
 
-            towerModel.AddBehavior(phoenix);
+            var uab = new AbilityModel("dummy", "dummy", "dummy", 0, 0, GetSpriteReference("Iconpng"), 30, new Il2CppReferenceArray<Il2CppAssets.Scripts.Models.Model>(0), false, false, "", 3, 0, 0, false, false, false);
+            foreach (var AbilityModel in towerModel.GetAbilities().ToArray())
+            {
+                if (AbilityModel.name.Contains("Secondary"))
+                {
+                    uab = AbilityModel;
+                }
+            }
+            if (uab.enabled == true)
+            {
+                towerModel.AddBehavior(uab);
+            }
             tower.UpdateRootModel(towerModel);
         }
     }
-    public class Acid : WeaponTemplate
+    public class BisonSteak : WeaponTemplate
     {
         public override int SandboxIndex => 1;
         public override Rarity WeaponRarity => Rarity.Common;
-        public override string WeaponName => "Acid";
-        public override string Icon => VanillaSprites.LargerPotionsUpgradeIcon;
-        public override bool IsLead => true;
+        public override string WeaponName => "Bison Steak";
+        public override string Icon => GetSpriteReference("texSteakIcon").GUID;
         public override void EditTower(Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            var wpn = Game.instance.model.GetTowerFromId("Alchemist").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            towerModel.AddBehavior(wpn);
+            towerModel.GetBehavior<LifeRegenModel>().overRegenAmount += 5;
             tower.UpdateRootModel(towerModel);
         }
     }
-    public class Shell : WeaponTemplate
+
+    public class CautiousSlug : WeaponTemplate
     {
         public override int SandboxIndex => 1;
         public override Rarity WeaponRarity => Rarity.Common;
-        public override string WeaponName => "Shell";
-        public override string Icon => VanillaSprites.FasterReloadUpgradeIcon2;
-        public override bool IsLead => true;
+        public override string WeaponName => "Cautious Slug";
+        public override string Icon => GetSpriteReference("texSnailIcon").GUID;
         public override void EditTower(Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            var wpn = Game.instance.model.GetTowerFromId("MortarMonkey").GetAttackModel().Duplicate();
-            wpn.RemoveBehaviors<TargetSelectedPointModel>();
-            wpn.AddBehavior(new TargetStrongModel("targetstrong", false, false));
-            wpn.AddBehavior(new TargetCloseModel("targetclose", false, false));
-            wpn.AddBehavior(new TargetFirstModel("targetfirst", false, false));
-            wpn.AddBehavior(new TargetLastModel("targetlast", false, false));
-           
-            towerModel.AddBehavior(wpn);
+            towerModel.GetBehavior<LifeRegenModel>().regenAmount += 1;
             tower.UpdateRootModel(towerModel);
         }
     }
-    public class Ice : WeaponTemplate
+
+    //[HarmonyPatch(typeof(Il2CppAssets.Scripts.Models.Gameplay.Mods.), nameof(MaxHealthModModel))]
+    //internal static class MaxHealthModModel
+    //{
+    //[HarmonyPrefix]
+    //private static bool Postfix(MaxHealthModModel __instance, ref int __result)
+    //{
+    // return false;
+    //}
+    //}
+
+    public class SoldiersSyringe : WeaponTemplate
     {
         public override int SandboxIndex => 1;
         public override Rarity WeaponRarity => Rarity.Common;
-        public override string WeaponName => "Ice";
-        public override string Icon => VanillaSprites.PermafrostUpgradeIcon;
+        public override string WeaponName => "Soldier's Syringe";
+        public override string Icon => GetSpriteReference("texSyringeIcon").GUID;
         public override void EditTower(Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            var wpn = Game.instance.model.GetTowerFromId("IceMonkey").GetAttackModel().Duplicate();
-            wpn.range = tower.towerModel.range;
-            towerModel.AddBehavior(wpn);
+            foreach (var weaponModel in towerModel.GetDescendants<WeaponModel>().ToArray())
+            {
+                weaponModel.Rate *= 0.85f;
+                weaponModel.rate *= 0.85f;
+            }
             tower.UpdateRootModel(towerModel);
         }
     }
+    public class Mocha : WeaponTemplate
+    {
+        public override int SandboxIndex => 1;
+        public override Rarity WeaponRarity => Rarity.Common;
+        public override string WeaponName => "Mocha";
+        public override string Icon => GetSpriteReference("texCoffeeIcon").GUID;
+        public override void EditTower(Tower tower)
+        {
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            //towerModel.GetDescendant<RateSupportBombExpertModel>().pierceMultiplier += 0.07f;
+            foreach (var weaponModel in towerModel.GetAttackModels().ToArray())
+            {
+                weaponModel.range *= 1.07f;
+                foreach (var wawa in towerModel.GetWeapons().ToArray())
+                {
+                    wawa.Rate *= 0.85f / 2;
+                    wawa.rate *= 0.85f / 2;
+
+                    foreach (var projectileModel in towerModel.GetDescendants<ProjectileModel>().ToArray())
+                    {
+                        projectileModel.pierce += 0.125f;
+                    }
+                }
+            }
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+    public class PaulsGoatHoof : WeaponTemplate
+    {
+        public override int SandboxIndex => 1;
+        public override Rarity WeaponRarity => Rarity.Common;
+        public override string WeaponName => "Paul's Goat Hoof";
+        public override string Icon => GetSpriteReference("Iconpng").GUID;
+        public override void EditTower(Tower tower)
+        {
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+
+            foreach (var weaponModel in towerModel.GetAttackModels().ToArray())
+            {
+                weaponModel.range *= 1.14f;
+                foreach (var projectileModel in towerModel.GetDescendants<ProjectileModel>().ToArray())
+                {
+                    projectileModel.pierce += 0.25f;
+                }
+            }
+            //if (towerModel.GetDescendant<RateSupportBombExpertModel>() != null)
+            //{
+            //towerModel.GetDescendant<RateSupportBombExpertModel>().rangeMultiplier += 0.14f;
+            //towerModel.GetDescendant<RateSupportBombExpertModel>().pierceMultiplier += 0.14f;
+            //}
+            //else
+            //{
+            //var PierceBuff = new RateSupportBombExpertModel("", true, false, 0.14f, 0.14f, new Il2CppReferenceArray<TowerFilterModel>(1));
+            //var fillterModels = PierceBuff.filters.ToList();
+            //fillterModels.Clear();
+            //fillterModels.Add(new FilterInBaseTowerIdModel("Sally_FilterInBaseTowerIdModel", new Il2CppStringArray(["AncientMonkey-Commando"])));
+            //PierceBuff.filters = fillterModels.ToIl2CppReferenceArray();
+            //PierceBuff.SetName("ItemPierceBuffs");
+            //towerModel.AddBehavior(PierceBuff);
+            //}
+            tower.UpdateRootModel(towerModel);
+        }
+    }
+
     public class Common
     {
         public static List<string> CommonWpn = new List<string>();

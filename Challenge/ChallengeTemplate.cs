@@ -23,11 +23,11 @@ namespace AncientMonkey.Challenge
         public virtual int DescriptionPanelHeight { get; }
         public virtual Sprite CustomSprite { get; }
         public virtual WeaponTemplate.Rarity MinNURarity { get; } = WeaponTemplate.Rarity.Common;
-        public virtual WeaponTemplate.Rarity MaxNURarity { get; } = WeaponTemplate.Rarity.Exotic;
-        public virtual WeaponTemplate.Rarity MinURarity { get; } = WeaponTemplate.Rarity.Rare;
-        public virtual WeaponTemplate.Rarity MaxURarity { get; } = WeaponTemplate.Rarity.Godly;
-        public virtual WeaponTemplate.Rarity MinUURarity { get; } = WeaponTemplate.Rarity.Omega;
-        public virtual WeaponTemplate.Rarity MaxUURarity { get; } = WeaponTemplate.Rarity.Omega;
+        public virtual WeaponTemplate.Rarity MaxNURarity { get; } = WeaponTemplate.Rarity.Legendary;
+        public virtual WeaponTemplate.Rarity MinURarity { get; } = WeaponTemplate.Rarity.Uncommon;
+        public virtual WeaponTemplate.Rarity MaxURarity { get; } = WeaponTemplate.Rarity.Legendary;
+        public virtual WeaponTemplate.Rarity MinUURarity { get; } = WeaponTemplate.Rarity.Lunar;
+        public virtual WeaponTemplate.Rarity MaxUURarity { get; } = WeaponTemplate.Rarity.Lunar;
         public virtual float NewWeaponCostMult { get; } = 1;
         public virtual float StrongerWeaponCostMult { get; } = 1;
         public virtual float AbilityWeaponCostMult { get; } = 1;

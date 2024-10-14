@@ -29,9 +29,11 @@ using Il2CppAssets.Scripts.Models.Towers.Weapons.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Mutators;
 using Il2CppAssets.Scripts.Models.GenericBehaviors;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities.Behaviors;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities;
 
 namespace AncientMonkey.Weapons
 {
+        
     public class MIB : AbilityTemplate
     {
         public override string AbilityName => "MIB";
@@ -48,7 +50,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("WizardMonkey-042").GetAbility().Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -60,7 +63,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("SuperMonkey-004").GetAbility().Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -72,7 +76,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("TackShooter-040").GetAbility().Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -84,7 +89,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("SuperMonkey-040").GetAbility().Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -96,7 +102,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("SpikeFactory-040").GetAbility().Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -108,7 +115,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("EngineerMonkey-040").GetAbility().Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -120,7 +128,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("MonkeySub-040").GetAbility().Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -132,7 +141,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("IceMonkey-040").GetAbility().Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -144,7 +154,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("SpikeFactory-250").GetAbility().Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -156,7 +167,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("BombShooter-050").GetAbility().Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -168,19 +180,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("BananaFarm-050").GetAbility().Duplicate();
-            towerModel.AddBehavior(ab);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class PermaPhoenix : AbilityTemplate
-    {
-        public override string AbilityName => "Perma Phoenix";
-        public override string Icon => VanillaSprites.WizardLordPhoenixUpgradeIcon;
-        public override void EditTower(Tower tower)
-        {
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            var phoenix = Game.instance.model.GetTowerFromId("WizardMonkey-050").GetBehavior<TowerCreateTowerModel>().Duplicate();
-            towerModel.AddBehavior(phoenix);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -192,7 +193,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("Gwendolin 20").GetAbility(1).Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -204,7 +206,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("Ezili 20").GetAbility(2).Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -216,20 +219,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("Adora 20").GetAbility(2).Duplicate();
-            towerModel.AddBehavior(ab);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class PermaUCAV : AbilityTemplate
-    {
-        public override string AbilityName => "Perma UCAV";
-        public override string Icon => VanillaSprites.UcavAA;
-        public override void EditTower(Tower tower)
-        {
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            var phoenix = Game.instance.model.GetTowerFromId("WizardMonkey-050").GetBehavior<TowerCreateTowerModel>().Duplicate();
-            phoenix.towerModel = Game.instance.model.GetTowerFromId("UCAVPerma").Duplicate();
-            towerModel.AddBehavior(phoenix);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -241,7 +232,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("Psi 20").GetAbility(1).Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }
@@ -253,19 +245,8 @@ namespace AncientMonkey.Weapons
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             var ab = Game.instance.model.GetTowerFromId("CaptainChurchill 20").GetAbility(1).Duplicate();
-            towerModel.AddBehavior(ab);
-            tower.UpdateRootModel(towerModel);
-        }
-    }
-    public class BenjaminEndOfRoundCash : AbilityTemplate
-    {
-        public override string AbilityName => "Ben End Round Cash";
-        public override string Icon => VanillaSprites.BenjaminIcon;
-        public override void EditTower(Tower tower)
-        {
-            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-            var ab = Game.instance.model.GetTowerFromId("Benjamin 20").GetBehavior<PerRoundCashBonusTowerModel>().Duplicate();
-            towerModel.AddBehavior(ab);
+            EditEquipmentName(ab);
+            SwapEquipment(towerModel, ab);
             tower.UpdateRootModel(towerModel);
         }
     }

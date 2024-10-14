@@ -21,17 +21,43 @@ namespace AncientMonkey.Challenge
         public override string Description => "-Basic Mode";
         public override int DescriptionPanelHeight => 80;
     }
-    public class OnlyGodly : ChallengeTemplate
+    public class EulogyZero : ChallengeTemplate
     {
         public override Difficulty ChallengeDifficulty => Difficulty.Easy;
-        public override string ChallengeName => "Only Godly";
-        public override string Background => VanillaSprites.MainBgPanelWhiteSmall;
+        public override string ChallengeName => "Start";
+        public override string Background => VanillaSprites.MainBGPanelBlue;
+        public override string Icon => "texDominoIcon";
+        public override string Description => "- 5% Chance for ANY Item to be Lunar";
+        public override Rarity MaxNURarity => Rarity.Common;
+        public override Rarity MinNURarity => Rarity.Lunar;
+        public override Rarity MaxURarity => Rarity.VoidLegendary;
+        public override Rarity MinURarity => Rarity.VoidUncommon;
+        public override int DescriptionPanelHeight => 180;
+    }
+    public class OnlyVoid : ChallengeTemplate
+    {
+        public override Difficulty ChallengeDifficulty => Difficulty.Easy;
+        public override string ChallengeName => "Only Void";
+        public override string Background => VanillaSprites.MainBgPanelParagon;
         public override string Icon => VanillaSprites.VengefulAdoraIcon;
-        public override string Description => "-Every New Weapon Is Godly\n-Every Stronger Weapon Is Godly";
-        public override Rarity MaxNURarity => Rarity.Godly;
-        public override Rarity MinNURarity => Rarity.Godly;
-        public override Rarity MaxURarity => Rarity.Godly;
-        public override Rarity MinURarity => Rarity.Godly;
+        public override string Description => "-Every Item Is Void";
+        public override Rarity MaxNURarity => Rarity.VoidLegendary;
+        public override Rarity MinNURarity => Rarity.VoidCommon;
+        public override Rarity MaxURarity => Rarity.VoidLegendary;
+        public override Rarity MinURarity => Rarity.VoidUncommon;
+        public override int DescriptionPanelHeight => 180;
+    }
+    public class OnlyLunar : ChallengeTemplate
+    {
+        public override Difficulty ChallengeDifficulty => Difficulty.Easy;
+        public override string ChallengeName => "Only Lunar";
+        public override string Background => VanillaSprites.MainBGPanelBlue;
+        public override string Icon => VanillaSprites.MoonRabbitPropIcon;
+        public override string Description => "- Every Item Is Lunar";
+        public override Rarity MaxNURarity => Rarity.VoidLegendary;
+        public override Rarity MinNURarity => Rarity.VoidCommon;
+        public override Rarity MaxURarity => Rarity.VoidLegendary;
+        public override Rarity MinURarity => Rarity.VoidUncommon;
         public override int DescriptionPanelHeight => 180;
     }
     public class LegendaryMadness : ChallengeTemplate
@@ -41,9 +67,9 @@ namespace AncientMonkey.Challenge
         public override string Background => VanillaSprites.MainBGPanelYellow;
         public override string Icon => VanillaSprites.SunTempleUpgradeIcon;
         public override string Description => "-Every New Weapon Is Min Legendary\n-Every Stronger Weapon Is Min Legendary";
-        public override Rarity MaxNURarity => Rarity.Exotic;
+        public override Rarity MaxNURarity => Rarity.Legendary;
         public override Rarity MinNURarity => Rarity.Legendary;
-        public override Rarity MaxURarity => Rarity.Godly;
+        public override Rarity MaxURarity => Rarity.Legendary;
         public override Rarity MinURarity => Rarity.Legendary;
         public override int DescriptionPanelHeight => 180;
     }

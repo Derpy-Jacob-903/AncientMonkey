@@ -20,13 +20,17 @@ namespace AncientMonkey
         public abstract void EditTower(Tower tower);
         public enum Rarity
         {
-            Common,
-            Rare,
-            Epic,
-            Legendary,
-            Exotic,
-            Godly,
-            Omega,
+            Common, //White
+            Uncommon, //Green
+            Legendary, //Red
+            Exotic, //Yellow
+
+            Lunar, //Blue
+
+            VoidCommon, //Purple
+            VoidUncommon, //Purple
+            VoidLegendary, //Purple
+            VoidExotic, //Purple
         }
         public virtual bool IsCamo { get; }
         public virtual bool IsLead { get; }
