@@ -79,6 +79,8 @@ namespace AncientMonkey.Challenge
             if (menuName == "MapSelectScreen")
             {
                 AncientPanelButton.Show();
+
+                ChallengeButton.Show();
             }
         }
     }
@@ -90,6 +92,8 @@ namespace AncientMonkey.Challenge
         private static void Postfix()
         {
             AncientPanelButton.Hide();
+
+            ChallengeButton.Hide();
         }
     }
 
@@ -100,6 +104,8 @@ namespace AncientMonkey.Challenge
         private static void Postfix()
         {
             AncientPanelButton.Hide();
+
+            ChallengeButton.Hide();
         }
     }
 
@@ -110,6 +116,8 @@ namespace AncientMonkey.Challenge
         private static void Postfix()
         {
             AncientPanelButton.Hide();
+
+            ChallengeButton.Hide();
         }
     }
 
@@ -120,6 +128,8 @@ namespace AncientMonkey.Challenge
         private static void Postfix()
         {
             AncientPanelButton.Show();
+
+            ChallengeButton.Show();
         }
     }
 
@@ -130,6 +140,8 @@ namespace AncientMonkey.Challenge
         private static void Postfix()
         {
             AncientPanelButton.Hide();
+
+            ChallengeButton.Hide();
         }
     }
 }

@@ -163,7 +163,7 @@ using BTD_Mod_Helper.Api.Display;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors;
 using Il2CppAssets.Scripts.Models.GenericBehaviors;
 using Il2CppNinjaKiwi.Common.ResourceUtils;
-using Il2CppNinjaKiwi.LiNK.Utils;
+using Il2CppNinjaKiwi.LiNK.Client.Utils;
 using Octokit;
 using Il2CppAssets.Scripts.Simulation.Towers.Projectiles;
 using System.IO;
@@ -255,6 +255,8 @@ public class AncientMonkey : BloonsTD6Mod
     public int EpicWeaponsBoxCount = 0;
     public string Path = "Mods/AncientMonkey/";
     public bool DailyReset = false;
+
+    public ChallengeTemplate selectedChallenge { get; internal set; }
 
     public override void OnApplicationQuit()
     {
